@@ -1,0 +1,232 @@
+/* Global Styles - không dùng Tailwind */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Custom classes thay thế Tailwind */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .bg-gray-50 {
+    background-color: #f9fafb;
+  }
+  
+  .p-4 {
+    padding: 1rem;
+  }
+  
+  .p-6 {
+    padding: 1.5rem 0px;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .mt-6 {
+    margin-top: 1.5rem;
+  }
+  
+  .ml-4 {
+    margin-left: 1rem;
+  }
+  
+  .mr-4 {
+    margin-right: 1rem;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  .gap-4 {
+    gap: 1rem;
+  }
+  
+  .gap-6 {
+    gap: 1.5rem;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-xl {
+    font-size: 1.25rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.875rem;
+  }
+  
+  .font-bold {
+    font-weight: 700;
+  }
+  
+  .text-blue-600 {
+    color: #2563eb;
+  }
+  
+  .text-red-600 {
+    color: #dc2626;
+  }
+  
+  .text-gray-500 {
+    color: #6b7280;
+  }
+  
+  .text-gray-600 {
+    color: #4b5563;
+  }
+  
+  .text-gray-100 {
+    color: #f3f4f6;
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  
+  .w-48 {
+    width: 12rem;
+  }
+  
+  .w-16 {
+    width: 4rem;
+  }
+  
+  .w-20 {
+    width: 5rem;
+  }
+  
+  .h-64 {
+    height: 16rem;
+  }
+  
+  .h-48 {
+    height: 12rem;
+  }
+  
+  .h-40 {
+    height: 10rem;
+  }
+  
+  .h-16 {
+    height: 4rem;
+  }
+  
+  .object-contain {
+    object-fit: contain;
+  }
+  
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .border-t {
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .rounded {
+    border-radius: 0.25rem;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .py-20 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  
+  .p-4 {
+    padding: 1rem;
+  }
+  
+  /* Ant Design override */
+  .ant-layout {
+    background: #f0f2f5;
+  }
+  
+  .ant-card {
+    border-radius: 8px;
+  }
+  
+  .ant-card-hoverable:hover {
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+  }
+  
+  /* Loading spinner */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+  }
+  
+  /* Fix cho Ant Design */
+  .ant-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Gradient backgrounds */
+  .bg-gradient-to-r {
+    background: linear-gradient(to right, #3b82f6, #7c3aed);
+  }
+  
+  .from-blue-500 {
+    --tw-gradient-from: #3b82f6;
+  }
+  
+  .to-purple-600 {
+    --tw-gradient-to: #7c3aed;
+  }
