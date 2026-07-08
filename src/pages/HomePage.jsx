@@ -1,47 +1,88 @@
-import { Row, Col, Card, Button, Typography } from "antd";
+import { Row, Col, Card, Button, Typography, Spin, Result } from "antd";
 import SliderApp from "../components/Home/Slider";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductRequest } from "../redux/slices/productSlice";
+import { useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+  useEffect(() => {
+    dispatch(fetchProductRequest());
+  }, [dispatch]);
+
+  if (loading) {
     return (
-        <>
-            <SliderApp
-                title='Welcome to Luxury Shop'
-                paragraph='Discover amazing products at great price'
-            />
-            <div className="container mx-auto">
-                <Title level={2} className="mb-6"> San pham noi bat</Title>
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={12} md={6} lg={3}>
-                        <Card
-                            hoverable
-                            cover={
-                                <img
-                                    alt="Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops"
-                                    src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png"
-                                    className="h-40 object-contain p-4"/>
-                            }
-                        >
-                            <Card.Meta
-                                title={<div className="text-sm truncate">Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</div>}
-                                description={
-                                    <>
-                                        <div className="text-lg font-bold text-red-600">
-                                            $ 109.95
-                                        </div>
-                                        <Button type="primary" block size="small"> Add to cart </Button>
-                                    </>
-                                }
-                            />
-                            <Button type="link" size="small" block>
-                                View Details
-                            </Button>
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
-        </>
-    )
-}
-export default HomePage
+      <div className="flex justify-center items-center h-64">
+        <Spin size="large" tip="Loading ... " />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+        <Result
+            status="warning"
+            title={error}
+        />
+    );
+  }
+  const featuredProducts = products.slice(0, 8); // lay ra 8 san pham
+
+  return (
+    <>
+      <SliderApp
+        title="Welcome to Luxury Shop"
+        paragraph="Discover amazing products at great price"
+      />
+      <div className="container mx-auto">
+        <Title level={2} className="mb-6">
+          {" "}
+          San pham noi bat
+        </Title>
+        <Row gutter={[16, 16]}>
+            {featuredProducts.map((pd) => (
+            <Col xs={24} sm={12} md={6} lg={3} key={pd.id}>
+                <Card
+                  hoverable
+                  cover={
+                    <img
+                      alt={pd.title}
+                      src={pd.image}
+                      className="h-40 object-contain p-4"
+                    />
+                  }
+                >
+                    <Card.Meta
+                    title={
+                      <div className="text-sm truncate">
+                        {pd.title}
+                      </div>
+                    }
+                    description={
+                      <>
+                        <div className="text-lg font-bold text-red-600">
+                            $ {pd.price}
+                        </div>
+                        <Button type="primary" block size="small">
+                            Add to cart
+                        </Button>
+                      </>
+                    }
+                    />
+                    <Link to={`/products/${pd.id}`}>
+                        <Button type="link" size="small" block>
+                            View Details
+                        </Button>
+                    </Link>
+                </Card>
+            </Col>
+            ))}
+        </Row>
+      </div>
+    </>
+  );
+};
+export default HomePage;

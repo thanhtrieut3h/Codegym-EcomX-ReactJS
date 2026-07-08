@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
     return config;
 }, (error) => Promise.reject(error));
 
-export const ProductAPI = {
+export const productAPI = {
     getAll: () => api.get('/products'),
     getById: (id) => api.get(`/products/${id}`),
     getCategories: () => api.get('/products/categories'),
