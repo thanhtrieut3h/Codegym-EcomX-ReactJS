@@ -1,7 +1,7 @@
 import {
     Button, Spin, Rate, Typography, Row, Col,
     Image, Descriptions, Tag, Space, message,
-    Card
+    Card, Result
 } from 'antd';
 import {
     ShoppingCartOutlined,
@@ -9,20 +9,57 @@ import {
     MinusOutlined,
     PlusOutlined,
 } from '@ant-design/icons';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductByIdRequest, clearSelectedProduct } from '../redux/slices/productDetailSlice';
+
 const { Title, Paragraph } = Typography;
 
 const ProductDetailPage = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const { productDetail, loading, error } = useSelector(state => state.productDetail);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchProductByIdRequest(id));
+        return () => {
+            dispatch(clearSelectedProduct());
+        }
+    }, [dispatch, id]);
+
+    if(loading){
+        return (
+            <div className="flex justify-center items-center h-64">
+              <Spin size="large" tip="Loading ... " />
+            </div>
+        );
+    }
+    if(!productDetail || error !== null){
+        return (
+            <Result
+                status="warning"
+                title={error}
+            />
+        );
+    }
+
     return (
         <div className='container mx-auto p-4'>
-            <Button icon={<ArrowLeftOutlined/>} className='mb-4'>
+            <Button
+                icon={<ArrowLeftOutlined/>}
+                className='mb-4'
+                onClick={() => navigate('/products')}
+            >
                 Back to Products
             </Button>
             <Row gutter={[24, 24]}>
                 <Col xs={24} md={10}>
                     <Card>
                         <Image
-                            src='https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png'
-                            alt='Mens Casual Premium Slim Fit T-Shirts'
+                            src={productDetail.image}
+                            alt={productDetail.title}
                             className='w-full object-contain'
                             style={{height: '400px'}}
                         />
@@ -30,26 +67,42 @@ const ProductDetailPage = () => {
                 </Col>
                 <Col xs={24} md={14}>
                    <Card>
-                        <Title level={2}>Mens Casual Premium Slim Fit T-Shirts</Title>
+                        <Title level={2}>
+                            {productDetail.title}
+                        </Title>
                         <Space className='mb-4'>
-                            <Rate disabled defaultValue={3.9} />
+                            <Rate disabled defaultValue={productDetail.rating?.rate || 0} />
                             <span className='text-gray-500'>
-                                (120 reviews)
+                                ({productDetail.rating?.count || 0} reviews)
                             </span>
                         </Space>
                         <Descriptions column={1} className='mb-4'>
                             <Descriptions.Item label="Category">
-                                <Tag color="blue">men's clothing</Tag>
+                                <Tag color="blue">
+                                    {productDetail.category}
+                                </Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Price">
-                                <Title level={3} className='text-red-600'>$ 109.95</Title>
+                                <Title level={3} className='text-red-600'>$ {productDetail.price}</Title>
                             </Descriptions.Item>
                             <Descriptions.Item label="Description">
                                 <Paragraph>
-                                    Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday
+                                    {productDetail.description}
                                 </Paragraph>
                             </Descriptions.Item>
                         </Descriptions>
+                        <div className='flex items-center gap-4 mb-4'>
+                            <span className='font-medium'>Quantity : </span>
+                            <Button icon={<MinusOutlined/>} />
+                            <span className='text-lg font-bold w-8 text-center'> 1 </span>
+                            <Button icon={<PlusOutlined/>} />
+                        </div>
+                        <Button
+                            type='primary'
+                            size='large'
+                            icon={<ShoppingCartOutlined/>}
+                            className='w-full'
+                        > Add to Cart</Button>
                    </Card>
                 </Col>
             </Row>

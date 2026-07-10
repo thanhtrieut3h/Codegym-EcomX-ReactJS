@@ -4,7 +4,6 @@ const initialState = {
     products: [],
     loading: false,
     error: null,
-    selectedProduct: null,
 }
 
 const productSlice = createSlice({
@@ -23,23 +22,13 @@ const productSlice = createSlice({
         fetchProductFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
-        },
-        clearSelectedProduct: state => {
-            state.selectedProduct = null;
-        },
-        clearProducts: state => {
-            state.products = [];
-            state.selectedProduct = null;
-            state.error = null;
-        } 
+        }
     }
 });
 export const {
     fetchProductRequest,
     fetchProductSuccess,
-    fetchProductFailure,
-    clearSelectedProduct,
-    clearProducts
+    fetchProductFailure
 } = productSlice.actions;
 
 export default productSlice.reducer;

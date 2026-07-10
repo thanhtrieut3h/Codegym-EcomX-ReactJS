@@ -6,6 +6,7 @@ import HomePage from "../pages/HomePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import LoginPage from "../pages/LoginPage";
 import ProductDetailPage from "../pages/ProductDetail";
+import ProductListPage from "../pages/ProductListPage";
 
 const { Content } = Layout;
 
@@ -17,6 +18,7 @@ const AppRouter = () => {
                 <Content className="p-6 bg-gray-50">
                     <Routes>
                         <Route path="/" element={<HomePage/>} />
+                        <Route path="/products" element={<ProductListPage/>} />
                         <Route path="/products/:id" element={<ProductDetailPage/>} />
                         <Route path="/login" element={<LoginPage/>} />
                         <Route path="*" element={<NotFoundPage/>} />
