@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     products: [],
+    categories: [],
     loading: false,
     error: null,
 }
@@ -22,13 +23,31 @@ const productSlice = createSlice({
         fetchProductFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
+        },
+        fetchCategoriesRequest: state => {
+            state.loading = true;
+        },
+        fetchCategoriesSuccess : (state, action) => {
+            state.loading = false;
+            state.categories = action.payload;
+        },
+        fetchCategoriesFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        filterByCategory: (state, action) => {
+            state.products = state.products.filter(product => product.category === action.payload);
         }
     }
 });
 export const {
     fetchProductRequest,
     fetchProductSuccess,
-    fetchProductFailure
+    fetchProductFailure,
+    fetchCategoriesRequest,
+    fetchCategoriesSuccess,
+    fetchCategoriesFailure,
+    filterByCategory,
 } = productSlice.actions;
 
 export default productSlice.reducer;

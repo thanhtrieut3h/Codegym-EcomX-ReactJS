@@ -3,8 +3,23 @@ import { productAPI } from '../../api/api';
 import {
     fetchProductRequest,
     fetchProductSuccess,
-    fetchProductFailure
+    fetchProductFailure,
+    fetchCategoriesRequest,
+    fetchCategoriesSuccess,
+    fetchCategoriesFailure
 } from '../slices/productSlice';
+
+function* fetchCategories(){
+    try {
+        const response = yield call(productAPI.getCategories);
+        yield put(fetchCategoriesSuccess(response.data));
+    } catch (error) {
+        yield put(fetchCategoriesFailure(error.message));
+    }
+}
+export function* watchFetchCategories(){
+    yield takeLatest(fetchCategoriesRequest.type, fetchCategories);
+}
 
 function* fetchProducts(){
     try {
