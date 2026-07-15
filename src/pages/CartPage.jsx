@@ -8,10 +8,29 @@ import {
     ClearOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import {
+    removeFromCart,
+    updateCartQuantity,
+    clearCart
+} from '../redux/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { Title, Text } = Typography;
 
 const CartPage = () => {
+    const dispatch = useDispatch();
+    const { carts, totalItems, totalPrice } = useSelector(state => state.cart);
+    const handleUpdateCartQuantity = (productId, quantity) => {
+        dispatch(updateCartQuantity({ productId, quantity }));
+    }
+    const handleRemoveItem = (productId) => {
+        dispatch(removeFromCart({ productId }));
+        message.success('Item removed from cart !');
+    }
+    const handleClearCart = () => {
+        dispatch(clearCart());
+        message.success('Cart cleared');
+    }
     const columns = [
         {
             title: 'Product',
@@ -37,6 +56,7 @@ const CartPage = () => {
                     max={99}
                     value={quantity}
                     className='w-20'
+                    onChange={value => handleUpdateCartQuantity(record.productId, value)}
                 />
             )
         },
@@ -55,6 +75,7 @@ const CartPage = () => {
                     title="Remove item ?"
                     okText="Yes"
                     cancelText="No"
+                    onConfirm={() => handleRemoveItem(record.productId)}
                 >
                     <Button
                        type='danger'
@@ -68,6 +89,21 @@ const CartPage = () => {
         }
     ];
 
+    if(carts.length === 0){
+        return (
+            <div className='container mx-auto p-4'>
+                <Empty
+                    image={<ShoppingCartOutlined style={{ fontSize: 64 }} />}
+                    description="Your cart is empty"
+                >
+                    <Link to="/products">
+                        <Button type='primary'> Continue Shopping </Button>
+                    </Link>
+                </Empty>
+            </div>
+        )
+    }
+
     return (
         <div className='container mx-auto p-4'>
             <div className='flex justify-between items-center mb-6'>
@@ -77,6 +113,7 @@ const CartPage = () => {
                         title="Clear all item ?"
                         okText="Yes"
                         cancelText="No"
+                        onConfirm={handleClearCart}
                     >
                         <Button type='danger' icon={<ClearOutlined/>}> Clear Cart</Button>
                     </Popconfirm>
@@ -87,7 +124,7 @@ const CartPage = () => {
             </div>
             <Table
                 columns={columns}
-                dataSource={[]}
+                dataSource={carts}
                 rowKey="productId"
                 pagination={false}
             />
@@ -95,12 +132,14 @@ const CartPage = () => {
                 <div className='flex justify-end gap-8'>
                     <div>
                         <Text className='text-lg'>
-                            Total Items: <strong> 4 </strong>
+                            Total Items: <strong> {totalItems} </strong>
                         </Text>
                     </div>
                     <div>
                         <Text className='text-lg'>
-                            Total Price: <strong className='text-red-600 text-xl'> 100000</strong>
+                            Total Price: <strong className='text-red-600 text-xl'>
+                                ${totalPrice.toFixed(2)}
+                            </strong>
                         </Text>
                     </div>
                     <Button type='primary' size='large'>

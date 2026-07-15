@@ -8,9 +8,11 @@ import {
     LoginOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
 const { Header: AntHeader } = Layout;
 const HeaderApp = () => {
+    const { totalItems } = useSelector(state => state.cart);
     const isAuthenticated = false;
     const menuItems = [
         {
@@ -26,7 +28,7 @@ const HeaderApp = () => {
         {
             key: 'cart',
             icon: (
-                <Badge count={0} size="small">
+                <Badge count={totalItems} size="small">
                     <ShoppingCartOutlined/>
                 </Badge>
             ),

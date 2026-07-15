@@ -13,6 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductByIdRequest, clearSelectedProduct } from '../redux/slices/productDetailSlice';
+import { addToCart } from '../redux/slices/cartSlice';
 
 const { Title, Paragraph } = Typography;
 
@@ -21,6 +22,7 @@ const ProductDetailPage = () => {
     const { id } = useParams();
     const { productDetail, loading, error } = useSelector(state => state.productDetail);
     const dispatch = useDispatch();
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         dispatch(fetchProductByIdRequest(id));
@@ -28,6 +30,26 @@ const ProductDetailPage = () => {
             dispatch(clearSelectedProduct());
         }
     }, [dispatch, id]);
+
+    const handleQuantityChange = (type) => {
+        if(type === 'increase'){
+            setQuantity(pre => pre + 1);
+        } else if(type === 'decrease' && quantity > 1){
+            setQuantity(pre => pre - 1);
+        }
+    }
+    const handleAddToCart = () => {
+        if(productDetail){
+            dispatch(addToCart({
+                productId: productDetail.id,
+                title: productDetail.title,
+                price: productDetail.price,
+                quantity: quantity,
+                image: productDetail.image
+            }));
+            message.success(`Added ${quantity} item(s) to cart`);
+        }
+    }
 
     if(loading){
         return (
@@ -93,15 +115,22 @@ const ProductDetailPage = () => {
                         </Descriptions>
                         <div className='flex items-center gap-4 mb-4'>
                             <span className='font-medium'>Quantity : </span>
-                            <Button icon={<MinusOutlined/>} />
-                            <span className='text-lg font-bold w-8 text-center'> 1 </span>
-                            <Button icon={<PlusOutlined/>} />
+                            <Button
+                                icon={<MinusOutlined/>}
+                                onClick={() => handleQuantityChange('decrease')}
+                            />
+                            <span className='text-lg font-bold w-8 text-center'> {quantity} </span>
+                            <Button
+                                icon={<PlusOutlined/>}
+                                onClick={() => handleQuantityChange('increase')}
+                            />
                         </div>
                         <Button
                             type='primary'
                             size='large'
                             icon={<ShoppingCartOutlined/>}
                             className='w-full'
+                            onClick={() => handleAddToCart()}
                         > Add to Cart</Button>
                    </Card>
                 </Col>

@@ -1,13 +1,14 @@
 import {
     Row, Col, Card, Input,
     Select, Button,
-    Spin, Pagination, Empty
+    Spin, Pagination, Empty, message
 } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductRequest, fetchCategoriesRequest } from '../redux/slices/productSlice';
 import { Link } from 'react-router-dom';
+import { addToCart } from '../redux/slices/cartSlice';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -24,6 +25,17 @@ const ProductListPage = () => {
         dispatch(fetchProductRequest());
         dispatch(fetchCategoriesRequest());
     }, [dispatch]);
+
+    const handleAddToCart = (product) => {
+        dispatch(addToCart({
+            productId: product.id,
+            title: product.title,
+            price: product.price,
+            quantity: 1,
+            image: product.image
+        }));
+        message.success('Added to cart !');
+    }
 
     // filter products
     const filteredProducts = products.filter(product => {
@@ -109,6 +121,7 @@ const ProductListPage = () => {
                                             type='primary'
                                             size='small'
                                             className='flex-1'
+                                            onClick={() => handleAddToCart(pd)}
                                         >
                                             Add to Cart
                                         </Button>

@@ -1,9 +1,10 @@
-import { Row, Col, Card, Button, Typography, Spin, Result } from "antd";
+import { Row, Col, Card, Button, Typography, Spin, Result, message } from "antd";
 import SliderApp from "../components/Home/Slider";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductRequest } from "../redux/slices/productSlice";
 import { useEffect } from "react";
 import { Link } from 'react-router-dom';
+import { addToCart } from '../redux/slices/cartSlice';
 
 const { Title } = Typography;
 
@@ -13,6 +14,17 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(fetchProductRequest());
   }, [dispatch]);
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({
+      productId: product.id,
+      title: product.title,
+      price: product.price,
+      quantity: 1,
+      image: product.image
+    }));
+    message.success('Added to cart !');
+  }
 
   if (loading) {
     return (
@@ -66,7 +78,11 @@ const HomePage = () => {
                         <div className="text-lg font-bold text-red-600">
                             $ {pd.price}
                         </div>
-                        <Button type="primary" block size="small">
+                        <Button
+                          type="primary"
+                          block size="small"
+                          onClick={() => handleAddToCart(pd)}
+                        >
                             Add to cart
                         </Button>
                       </>

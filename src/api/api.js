@@ -24,3 +24,13 @@ export const productAPI = {
     updateProduct: (id, data) => api.put(`/products/${id}`, data),
     deleteProduct: (id) => api.delete(`/products/${id}`)
 }
+
+// API Auth
+export const authAPI = {
+    login: data => api.post('/auth/login', data),
+}
+// API Users
+export const userAPI = {
+    getAll: () => api.get('/users'),
+    getById: (id) => api.get(`/users/${id}`)
+}
