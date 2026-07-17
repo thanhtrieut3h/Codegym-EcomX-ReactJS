@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "antd";
 import HeaderApp from '../components/HeaderApp';
 import FooterApp from '../components/FooterApp';
@@ -8,8 +8,15 @@ import LoginPage from "../pages/LoginPage";
 import ProductDetailPage from "../pages/ProductDetail";
 import ProductListPage from "../pages/ProductListPage";
 import CartPage from "../pages/CartPage";
+import UserProfile from "../pages/UserProfile";
+import { useSelector } from "react-redux";
 
 const { Content } = Layout;
+
+const PrivateRoute = ({ children }) => {
+    const { isAuthenticated } = useSelector(state => state.auth);
+    return isAuthenticated ? children : <Navigate to={`/login`} />
+}
 
 const AppRouter = () => {
     return (
@@ -23,6 +30,14 @@ const AppRouter = () => {
                         <Route path="/products/:id" element={<ProductDetailPage/>} />
                         <Route path="/cart" element={<CartPage/>} />
                         <Route path="/login" element={<LoginPage/>} />
+                        <Route
+                            path="/profile"
+                            element={
+                                <PrivateRoute>
+                                    <UserProfile/>
+                                </PrivateRoute>
+                            }
+                        />
                         <Route path="*" element={<NotFoundPage/>} />
                     </Routes>
                 </Content>

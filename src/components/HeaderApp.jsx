@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Layout, Menu, Badge, Button, Avatar } from "antd";
 import {
     ShoppingCartOutlined,
@@ -8,12 +8,21 @@ import {
     LoginOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
 
 const { Header: AntHeader } = Layout;
 const HeaderApp = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { totalItems } = useSelector(state => state.cart);
-    const isAuthenticated = false;
+    const { isAuthenticated, user } = useSelector(state => state.auth);
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate("/login");
+    }
+
     const menuItems = [
         {
             key: 'home',
@@ -39,12 +48,12 @@ const HeaderApp = () => {
         menuItems.push({
             key: 'profile',
             icon: <Avatar size="small" icon={<UserOutlined/>} />,
-            label: <Link to="/profile"> TrieuNT</Link>
+            label: <Link to="/profile">{user?.username || 'profile'}</Link>
         });
         menuItems.push({
             key: 'logout',
             icon: <LogoutOutlined/>,
-            label: <Button type="text"> Logout </Button>
+            label: <Button type="text" onClick={() => handleLogout()}> Logout </Button>
         });
     } else {
         menuItems.push({
