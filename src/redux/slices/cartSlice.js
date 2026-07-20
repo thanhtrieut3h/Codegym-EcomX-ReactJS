@@ -69,7 +69,15 @@ const cartSlice = createSlice({
         },
         setCurrentCart: (state, action) => {
             state.currentCart = action.payload;
-        }
+        },
+        // Reset cart state (cho logout)
+        resetCart: (state) => {
+            state.carts = [];
+            state.currentCart = null;
+            state.totalItems = 0;
+            state.totalPrice = 0;
+            state.error = null;
+        },
     }
 });
 export const {
@@ -80,7 +88,8 @@ export const {
     removeFromCart,
     updateCartQuantity,
     clearCart,
-    setCurrentCart
+    setCurrentCart,
+    resetCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

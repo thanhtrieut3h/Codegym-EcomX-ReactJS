@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
+import { persistor } from '../redux/store';
 
 const { Header: AntHeader } = Layout;
 const HeaderApp = () => {
@@ -18,8 +19,10 @@ const HeaderApp = () => {
     const { totalItems } = useSelector(state => state.cart);
     const { isAuthenticated, user } = useSelector(state => state.auth);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         dispatch(logout());
+        // Purge persisted state
+        await persistor.purge();
         navigate("/login");
     }
 

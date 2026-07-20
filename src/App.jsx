@@ -1,11 +1,15 @@
 import AppRouter from "./routes/AppRouter";
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import store, { persistor } from './redux/store';
+import PersistLoading from './components/Common/PersistLoading';
 
 const AppEcomx = () => {
     return (
         <Provider store={store}>
-            <AppRouter/>
+            <PersistGate loading={<PersistLoading/>} persistor={persistor}>
+                <AppRouter/>
+            </PersistGate>
         </Provider>
     )
 }

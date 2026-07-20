@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from 'redux-saga';
+import { persistStore } from 'redux-persist';
 import rootSaga from "./rootSaga";
 import rootReducer from './rootReducer';
 
@@ -10,8 +11,12 @@ const store = configureStore({
     middleware: (getDefaultMiddleware) => 
         getDefaultMiddleware({
             thunk: false,
-            serializableCheck: false
+            serializableCheck: {
+                ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+            }
         }).concat(sagaMiddleware)
 });
+// Tạo persistor
+export const persistor = persistStore(store);
 sagaMiddleware.run(rootSaga);
 export default store;

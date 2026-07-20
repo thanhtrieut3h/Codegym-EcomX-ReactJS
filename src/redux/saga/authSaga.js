@@ -3,8 +3,11 @@ import { authAPI } from '../../api/api';
 import {
     loginRequest,
     loginSuccess,
-    loginFailure
+    loginFailure,
+    logout,
 } from '../slices/authSlice';
+import { resetCart } from '../slices/cartSlice';
+import { persistor } from '../store';
 
 function* login(action) {
     try {
@@ -19,4 +22,23 @@ function* login(action) {
 }
 export function* watchLogin(){
     yield takeLatest(loginRequest.type, login);
+}
+
+function* handleLogout() {
+    try {
+      // Clear cart khi logout
+      yield put(resetCart());
+      
+      // Xóa toàn bộ persisted state
+      yield call([persistor, 'purge']);
+      
+      // Hoặc chỉ xóa một số state cụ thể
+      // yield call([persistor, 'flush']);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+}
+
+export function* watchLogout() {
+    yield takeLatest(logout.type, handleLogout);
 }

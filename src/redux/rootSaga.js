@@ -1,7 +1,7 @@
 import { all, fork } from 'redux-saga/effects';
 import { watchFetchProducts, watchFetchCategories } from './saga/productSaga';
 import { watchFetchProductById } from './saga/productDetailSaga';
-import { watchLogin } from './saga/authSaga';
+import { watchLogin, watchLogout } from './saga/authSaga';
 import { watchFetchAllUsers, watchFetchUserInfoById } from './saga/userSaga';
 
 export default function* rootSaga(){
@@ -12,5 +12,6 @@ export default function* rootSaga(){
         fork(watchLogin),
         fork(watchFetchAllUsers),
         fork(watchFetchUserInfoById),
+        fork(watchLogout),
     ]);
 }
